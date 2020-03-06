@@ -123,8 +123,19 @@ function(x,y=NULL,taux,tauy,global=TRUE,weight=NULL,correct=correct,gminx,gmaxx,
   if(tot ==0) {result <- list(rho=NA,objective=NA,fixed=1)
                return(result)} #we have no data for this cell   05/02/18
   tab <- tab/tot
+  if(!is.na(sum(tab)) ){
+    zerorows <- apply(tab, 1, function(x) all(x == 0))
+    zerocols <- apply(tab, 2, function(x) all(x == 0))
+    zr <- sum(zerorows)
+    zc <- sum(zerocols)
+    tab <- tab[!zerorows, ,drop=FALSE]  
+    tab <- tab[, !zerocols, drop=FALSE] 
+  }
+  
    if(correct > 0) {if(any(tab[]==0)) {fixed <- 1
-                 tab[tab==0] <- correct/tot }} #moved from below 16.6.22
+                 tab[tab==0] <- correct/tot 
+                 tab <- tab / sum(tab, na.rm = TRUE)
+                 }} #moved from below 16.6.22
  if(global) { rho <- optimize(polyF,interval=c(-1,1),rc=taux, cc=tauy,tab)#this uses the global taux and tauy
        } else { #use item row and column information for this pair, rather than global values
       #this seems to match the polycor function
