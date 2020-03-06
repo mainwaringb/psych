@@ -302,16 +302,15 @@ gmaxx &lt;- gmaxy &lt;- xmax #check for different maxima</code></pre>
   zerocols &lt;- apply(tab, 2, function(x) all(x == 0))</code></pre>
 <p>In other words, we want to identify zero rows so that they can be dropped, rather than add a continuity correction to zero rows so they are no longer flagged.</p>
 <p>The second component is rescaling the table (<code>tab</code>) so it sums to 1.0 after adding a continuity correction: <code>tab &lt;- tab/sum(tab)</code>. I think this is in line with how continuity corrections are supposed to work, although my theoretical background on polychoric/latent correlations is limited. Together, these changes should produce the following code:</p>
-<pre><code> if(global){
-  if(!is.na(sum(tab)) ){
-    zerorows &lt;- apply(tab, 1, function(x) all(x == 0))
-    zerocols &lt;- apply(tab, 2, function(x) all(x == 0))
-    zr &lt;- sum(zerorows)
-    zc &lt;- sum(zerocols)
-    tab &lt;- tab[!zerorows, ,drop=FALSE]  
-    tab &lt;- tab[, !zerocols, drop=FALSE] 
-  }
+<pre><code>if(!is.na(sum(tab)) ){
+  zerorows &lt;- apply(tab, 1, function(x) all(x == 0))
+  zerocols &lt;- apply(tab, 2, function(x) all(x == 0))
+  zr &lt;- sum(zerorows)
+  zc &lt;- sum(zerocols)
+  tab &lt;- tab[!zerorows, ,drop=FALSE]  
+  tab &lt;- tab[, !zerocols, drop=FALSE] 
 }
+
  if(correct &gt; 0) {if(any(tab[]==0)) {
    fixed &lt;- 1
    tab[tab==0] &lt;- correct/tot 

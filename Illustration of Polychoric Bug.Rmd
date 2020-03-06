@@ -92,11 +92,11 @@ Simply reordering the lines of code, so the `if` statement goes above `xmax <- m
     gminx <- gminy <- 1  #allow for different minima if minmax is null
     xmax <- apply(x,2,function(x)  max(x,na.rm=TRUE))
     #if(global) xmax <- max(xmax)     
-    xmax <- max(xmax)  #don't test for globality xmax
     if (min(xmax) != max(xmax)) {
       global <- FALSE
       warning("The items do not have an equal number of response alternatives, global set to FALSE.")
     }
+    xmax <- max(xmax)  #don't test for globality xmax
 
     gmaxx <- gmaxy <- xmax #check for different maxima
 
@@ -111,16 +111,16 @@ In other words, we want to identify zero rows so that they can be dropped, rathe
 
 The second component is rescaling the table (`tab`) so it sums to 1.0 after adding a continuity correction: `tab <- tab/sum(tab)`. I think this is in line with how continuity corrections are supposed to work, although my theoretical background on polychoric/latent correlations is limited. Together, these changes should produce the following code:
  
-     if(global){
-      if(!is.na(sum(tab)) ){
-        zerorows <- apply(tab, 1, function(x) all(x == 0))
-        zerocols <- apply(tab, 2, function(x) all(x == 0))
-        zr <- sum(zerorows)
-        zc <- sum(zerocols)
-        tab <- tab[!zerorows, ,drop=FALSE]  
-        tab <- tab[, !zerocols, drop=FALSE] 
-      }
+     
+    if(!is.na(sum(tab)) ){
+      zerorows <- apply(tab, 1, function(x) all(x == 0))
+      zerocols <- apply(tab, 2, function(x) all(x == 0))
+      zr <- sum(zerorows)
+      zc <- sum(zerocols)
+      tab <- tab[!zerorows, ,drop=FALSE]  
+      tab <- tab[, !zerocols, drop=FALSE] 
     }
+    
      if(correct > 0) {if(any(tab[]==0)) {
        fixed <- 1
        tab[tab==0] <- correct/tot 
