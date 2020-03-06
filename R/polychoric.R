@@ -297,11 +297,12 @@ x <- t(t(x) - xmin +1)  #all numbers now go from 1 to nvalues
   gminx <- gminy <- 1  #allow for different minima if minmax is null
   xmax <- apply(x,2,function(x)  max(x,na.rm=TRUE))
 #if(global) xmax <- max(xmax)     
- xmax <- max(xmax)  #don't test for globality xmax
- gmaxx <- gmaxy <- xmax #check for different maxima
  
-if (min(xmax) != max(xmax)) {global <- FALSE
+if (min(xmax) != max(xmax) & global == TRUE) {global <- FALSE
                       warning("The items do not have an equal number of response alternatives, global set to FALSE.")}
+xmax <- max(xmax)  #don't test for globality xmax
+gmaxx <- gmaxy <- xmax #check for different maxima
+  
 #xfreq <- apply(x- xmin + 1,2,tabulate,nbins=nvalues)
 xfreq <- apply(x,2,tabulate,nbins=nvalues)
 n.obs <- colSums(xfreq)
