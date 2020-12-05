@@ -3,7 +3,7 @@ Ben Mainwaring
 
 28/02/2020
 
-Submitted to William Revelle (psych package maintainer) on 28 Feb 2020
+Submitted to William Revelle (psych package maintainer) on 28 Feb 2020. The proposed fixes (although not the verbatim code) have been incorporated into development versions of the package, although they appear not to (yet) be reflected in the CRAN master release
 
 # Introduction
 
